@@ -41,22 +41,17 @@ def divide_list(lst, n):
 
 
 def main(num_of_groups):
-    mode = input("Enter mode (1 for EVM, 2 for EVM + starknet): ")
+    mode = int(input("Enter mode (1 for EVM, 2 for EVM + starknet): "))
     if mode != 1 and mode != 2:
         print("Invalid mode")
         return
 
-    if mode == 1:
-        keys, okx_addresses, proxies = load_files(mode)
-    else:
-        values = load_files(mode)
-
-    values = list(zip(*values))
+    values = list(zip(*load_files(mode)))
 
     if mode == 1:
         accounts = [
             {"mm_private_key": key, "okx_address": okx_address, "proxy": proxy}
-            for key, okx_address, proxy in accounts
+            for key, okx_address, proxy in values
         ]
     else:
         accounts = [
@@ -66,7 +61,7 @@ def main(num_of_groups):
                 "starknet_private_key": starknet_key,
                 "starknet_okx_address": starknet_okx_address,
             }
-            for mm_key, mm_okx_address, starknet_key, starknet_okx_address in accounts
+            for mm_key, mm_okx_address, starknet_key, starknet_okx_address in values
         ]
 
     chunks = divide_list(accounts, num_of_groups)
